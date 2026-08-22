@@ -1,0 +1,37 @@
+server:
+  port: 8000
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/journeydb
+    username: root
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# Mock security: simple token based (no real auth)
+security:
+  debug: true
+
+# CORS to allow frontend dev server
+cors:
+  allowed-origins: "http://localhost:5173"
+  allowed-methods: "*"
+  allowed-headers: "*"
+  allow-credentials: true
+
+# Redis (optional) – comment out if not used
+redis:
+  host: localhost
+  port: 6379
+
+# OTP simulation settings
+otp:
+  code-length: 6
+  expiry-minutes: 5
+  delay-millis: 0 # can be overridden via control panel
