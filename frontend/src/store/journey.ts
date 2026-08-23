@@ -60,9 +60,14 @@ export const useJourneyStore = create<JourneyState>((set, get) => {
             formData: parsed,
           });
           return data.currentStep as StepKey;
+        } else {
+          set({ journeyId: null, currentStep: 'PERSONAL', formData: {} });
+          return 'PERSONAL';
         }
       } catch (e) {
         console.warn('No existing draft loaded', e);
+        set({ journeyId: null, currentStep: 'PERSONAL', formData: {} });
+        return 'PERSONAL';
       }
     },
   };

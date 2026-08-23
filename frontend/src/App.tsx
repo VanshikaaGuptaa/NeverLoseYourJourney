@@ -59,15 +59,22 @@ const stepToPath: Record<string, string> = {
 
 export default function App() {
   const navigate = useNavigate();
+  const token = useAuthStore((state) => state.token);
   
   useEffect(() => {
-    // Run exactly once on mount, using getState to avoid subscribing to store changes
-    useJourneyStore.getState().loadInitial().then((step) => {
-      if (step && stepToPath[step]) {
-        navigate(stepToPath[step], { replace: true });
-      }
-    });
-  }, []);
+    console.log("App.tsx useEffect running. Token:", token ? "exists" : "null");
+    if (token) {
+      useJourneyStore.getState().loadInitial().then((step) => {
+        console.log("App.tsx loadInitial returned:", step);
+        if (step && stepToPath[step]) {
+          navigate(stepToPath[step], { replace: true });
+        }
+      });
+    } else {
+      // Clear store immediately on logout
+      useJourneyStore.setState({ journeyId: null, currentStep: 'PERSONAL', formData: {} });
+    }
+  }, [token]);
 
   return (
     <AuthProvider>
