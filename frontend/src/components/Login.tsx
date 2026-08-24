@@ -6,7 +6,7 @@ export default function Login() {
   const { login } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
-  const [email, setEmail] = useState('user@example.com');
+  const [email, setEmail] = useState(`user_${Math.floor(Math.random() * 1000)}@example.com`);
   const [password, setPassword] = useState('password');
   const [loading, setLoading] = useState(false);
 
@@ -18,8 +18,13 @@ export default function Login() {
     try {
       await login({ email, password });
       navigate(from, { replace: true });
-    } catch (err) {
-      alert('Login failed. Please try again.');
+    } catch (err: any) {
+      if (err.message === 'OTP_REQUIRED') {
+        // Navigate to OTP verification page, passing the mobile number (hardcoded 9999999999 for demo)
+        navigate('/verify-otp', { state: { email, mobile: '9999999999', from } });
+      } else {
+        alert('Login failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

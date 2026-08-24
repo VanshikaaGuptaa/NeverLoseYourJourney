@@ -45,7 +45,7 @@ public class OtpService {
         System.out.println("=========================================\n");
         
         // In real system we would send the code via SMS provider.
-        return new OtpResponse(req.mobile(), "SENT", expires.toEpochMilli());
+        return new OtpResponse(req.mobile(), "SENT", expires.toEpochMilli(), code);
     }
 
     public boolean verifyOtp(OtpVerifyRequest req) {

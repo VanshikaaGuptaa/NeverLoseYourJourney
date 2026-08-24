@@ -83,6 +83,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/step/1" replace />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/verify-otp" element={<StepVerification />} />
             {/* Protected Steps */}
             <Route path="/step/1" element={<ProtectedRoute><StepPersonal /></ProtectedRoute>} />
             <Route path="/step/2" element={<ProtectedRoute><StepAddress /></ProtectedRoute>} />
