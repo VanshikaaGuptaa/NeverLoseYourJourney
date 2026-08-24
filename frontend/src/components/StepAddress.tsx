@@ -3,20 +3,20 @@ import { useJourneyStore } from '../store/journey';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
-type FormValues = { address: string; city: string; zip: string };
+type FormValues = { street: string; city: string };
 
 export default function StepAddress() {
   const { formData, setCurrentStep, updateField, autosave } = useJourneyStore();
   const { register, handleSubmit, watch, reset } = useForm<FormValues>({
-    defaultValues: { address: formData.address || '', city: formData.city || '', zip: formData.zip || '' },
+    defaultValues: { street: formData.street || '', city: formData.city || '' },
   });
   const navigate = useNavigate();
 
   useEffect(() => { setCurrentStep('ADDRESS'); }, [setCurrentStep]);
 
   useEffect(() => {
-    reset({ address: formData.address || '', city: formData.city || '', zip: formData.zip || '' });
-  }, [formData.address, formData.city, formData.zip, reset]);
+    reset({ street: formData.street || '', city: formData.city || '' });
+  }, [formData.street, formData.city, reset]);
 
   useEffect(() => {
     const sub = watch((value) => {
@@ -26,22 +26,29 @@ export default function StepAddress() {
     return () => sub.unsubscribe();
   }, [watch, updateField, autosave]);
 
-  const onSubmit = () => {
-    navigate('/step/3');
-  };
+  const onSubmit = () => navigate('/step/3');
 
   return (
-    <div className="card">
-      <h2>2️⃣ Address</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div style={{ marginBottom: '1rem' }}><label style={{ display: 'block', marginBottom: '0.5rem' }}>Street</label><input className="input" {...register('address')} /></div>
-        <div style={{ marginBottom: '1rem' }}><label style={{ display: 'block', marginBottom: '0.5rem' }}>City</label><input className="input" {...register('city')} /></div>
-        <div style={{ marginBottom: '1rem' }}><label style={{ display: 'block', marginBottom: '0.5rem' }}>ZIP</label><input className="input" {...register('zip')} /></div>
-        <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '1rem', marginTop: '1rem' }}>
-          <button className="button" type="button" onClick={() => navigate('/step/1')} style={{ background: '#555' }}>← Back</button>
-          <button className="button" type="submit">Next →</button>
-        </div>
-      </form>
+    <div className="epfo-card">
+      <div className="epfo-card-header">
+        <h2 className="epfo-card-title">2️⃣ Address Details</h2>
+      </div>
+      <div className="epfo-card-body">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="epfo-form-group">
+            <label>Street Address</label>
+            <input className="epfo-input" {...register('street')} />
+          </div>
+          <div className="epfo-form-group">
+            <label>City</label>
+            <input className="epfo-input" {...register('city')} />
+          </div>
+          <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
+            <button className="btn-blue" type="button" onClick={() => navigate('/step/1')}>← Back</button>
+            <button className="btn-green" type="submit">Next →</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
