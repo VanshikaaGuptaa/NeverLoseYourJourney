@@ -1,7 +1,7 @@
-# Never Lose Your Journey
+# Resilient Journey
 
 ## What is this?
-**Never Lose Your Journey** is a smart multi-step form application designed to **never lose your data**, no matter what goes wrong. 
+**Resilient Journey** is a smart multi-step form application designed to **never lose your data**, no matter what goes wrong. 
 
 Have you ever spent 10 minutes filling out a long form on a government or bank website, only for your internet to blink out, your session to expire, or the server to crash—forcing you to start all over again? This application solves that problem!
 
@@ -9,11 +9,14 @@ It automatically saves your progress as you type. If your internet dies, if your
 
 ---
 
-## Features
+## Key Features
+
+- **Offline Resilience & Sync Queue:** If the network goes down, the app detects it and queues your auto-saves locally. When you come back online, it synchronizes your data automatically behind the scenes with zero data loss.
+- **Smart OTP Authentication:** A frictionless two-step login system. Once you authenticate with an OTP, your device is granted a 15-minute "Trusted Session" grace period. If you accidentally disconnect or drop your session, you can log back in immediately without being forced to re-enter an OTP.
 - **Auto-Save:** Your data is saved automatically in the background every time you type. No need to click "Save".
-- **Disaster Recovery:** If your session expires while you are typing, you will be asked to log in again, and then immediately returned to your form with zero data loss.
-- **Offline Protection:** If the network goes down, the app detects it and protects your work.
-- **Modern Design:** Beautiful dark/light mode interface with smooth animations and clean layouts.
+- **Disaster Recovery:** If your session expires while you are typing, you will be asked to log in again, and then immediately returned to your form exactly where you left it.
+- **Dynamic Progress Tracking:** A beautiful 6-step progress bar that keeps you informed of your current step, completed steps, and upcoming steps.
+- **Real-Time Telemetry:** The Resilience Dashboard gives you a live view of your authentication status, network connectivity, and background auto-save operations.
 
 ---
 
@@ -30,7 +33,7 @@ You don't need to be an expert to run this! We have packaged everything using **
 4. Wait a minute or two for everything to build and start.
 5. Open your web browser and go to: **http://localhost**
 
-*(Note: The app has a fake login system for demonstration purposes. You can type literally anything in the email and password fields to log in!)*
+*(Note: The app has a fake login system for demonstration purposes. You can type literally anything in the UID and password fields to log in!)*
 
 ---
 
@@ -40,19 +43,22 @@ Because this app is built to survive disasters, we added a special **Control Pan
 
 Here is a fun script to test out the resilience features:
 
-### 1. Test Auto-Save & Navigation
-Fill out the first page and click "Next". Click "Back" to return to the first page. Notice how your data is perfectly remembered without you having to click a "Save" button.
+### 1. Test Smart OTP & Grace Period
+Log in using any UID and password. You will be asked for an OTP. **(Press F12 to open your Browser Console—the demo OTP is printed there in green!)** Enter the OTP. 
+Now, click **"Expire Auth"** on the control panel to kill your session, and log in again. You will bypass the OTP screen entirely because of the 15-minute grace period!
+*(Pro Tip: Try logging in from an Incognito window—the system will recognize it as an untrusted device and demand an OTP!)*
 
-### 2. Test Session Expiry (The "Kicked Out" Scenario)
-Go to Step 2 or 3 and type some data. 
+### 2. Test Auto-Save Queue (Offline Mode)
+Go to any form step and type some data. 
+Click **"Fail Autosave"** or **"Network Fail"** on the control panel.
+Continue typing. Notice how the app doesn't crash? The Resilience Dashboard will show that it is queuing your data.
+Click **"Reset All"** to simulate the internet returning, and watch the dashboard automatically sync your queued data to the server!
+
+### 3. Test Session Expiry (The "Kicked Out" Scenario)
+Type some data in the form. 
 Click **"Expire Auth"** in the control panel. 
 Now, type one more letter in the form. The app will realize your login session is dead and kick you to the login screen. 
-Log back in (again, any fake email/password works). **Boom!** You are immediately brought back to the exact step you were on, and your data is exactly as you left it.
-
-### 3. Test Network Failure
-Progress through the form until you reach the final **Submit** page (Step 6).
-Click **"Network Fail"** on the control panel. This simulates your internet connection dying exactly as you try to submit.
-Click the **Submit** button. Normally, an app would crash, throw an ugly error, or kick you out. Here, the app intercepts the failure, keeps you perfectly safe on the page, and gently warns you that the submission failed.
+Log back in. **Boom!** You are immediately brought back to the exact step you were on, with all your data intact.
 
 ### 4. Test Browser Refresh
 Go to any step, type some data, and just hit **Refresh (F5)** on your browser. You won't lose your data and you will stay on the same step.
