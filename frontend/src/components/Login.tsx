@@ -6,8 +6,8 @@ export default function Login() {
   const { login } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
-  const [email, setEmail] = useState(`user_${Math.floor(Math.random() * 1000)}@example.com`);
-  const [password, setPassword] = useState('password');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const from = location.state?.from?.pathname || '/step/1';
