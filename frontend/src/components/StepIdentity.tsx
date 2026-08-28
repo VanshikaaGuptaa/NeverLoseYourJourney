@@ -14,9 +14,7 @@ export default function StepIdentity() {
 
   useEffect(() => { setCurrentStep('IDENTITY'); }, [setCurrentStep]);
 
-  useEffect(() => {
-    reset({ aadhar: formData.aadhar || '', pan: formData.pan || '' });
-  }, [formData.aadhar, formData.pan, reset]);
+  // Removed the reset useEffect because it fires on every keystroke via watch -> updateField -> formData change, breaking the form.
 
   useEffect(() => {
     const sub = watch((value) => {

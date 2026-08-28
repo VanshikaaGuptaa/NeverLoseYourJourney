@@ -14,9 +14,7 @@ export default function StepAddress() {
 
   useEffect(() => { setCurrentStep('ADDRESS'); }, [setCurrentStep]);
 
-  useEffect(() => {
-    reset({ street: formData.street || '', city: formData.city || '' });
-  }, [formData.street, formData.city, reset]);
+  // Removed the reset useEffect because it fires on every keystroke via watch -> updateField -> formData change, breaking the form.
 
   useEffect(() => {
     const sub = watch((value) => {

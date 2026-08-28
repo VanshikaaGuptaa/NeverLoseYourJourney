@@ -22,7 +22,7 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      useAuthStore.getState().logout();
+      useAuthStore.getState().handleSessionExpiry();
     }
     // Set network to offline if we get a 503/504 server error or network timeout (no response)
     if (!error.response || error.response.status === 503 || error.response.status === 504) {

@@ -65,9 +65,8 @@ export const useJourneyStore = create<JourneyState>((set, get) => {
           return 'PERSONAL';
         }
       } catch (e) {
-        console.warn('No existing draft loaded', e);
-        set({ journeyId: null, currentStep: 'PERSONAL', formData: {} });
-        return 'PERSONAL';
+        console.warn('No existing draft loaded, keeping local state', e);
+        return get().currentStep;
       }
     },
   };

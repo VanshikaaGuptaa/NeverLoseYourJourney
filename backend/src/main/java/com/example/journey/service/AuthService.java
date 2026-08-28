@@ -64,11 +64,12 @@ public class AuthService {
         if (request.password() != null && !passwordEncoder.matches(request.password(), user.getPasswordHash())) {
             throw new IllegalArgumentException("Invalid credentials");
         }
-        // Trusted‑device shortcut
+        // 5-Minute Grace Period / Smart Auth -> Trigger Passkey
         if (hasTrustedDevice(user, request.deviceToken())) {
-            return createSession(user);
+            throw new RuntimeException("WEBAUTHN_REQUIRED");
         }
-        // Initiate OTP flow
+
+        // Always initiate OTP/WebAuthn flow if no grace period
         pendingOtpMap.put(user.getMobile(), user.getId());
         com.example.journey.dto.OtpResponse otpRes = otpService.requestOtp(new com.example.journey.dto.OtpRequest(user.getMobile()));
         throw new RuntimeException("OTP_REQUIRED:" + otpRes.code());
@@ -99,7 +100,7 @@ public class AuthService {
         Instant now = Instant.now();
         device.setCreatedAt(now);
         device.setLastUsedAt(now);
-        device.setExpiresAt(now.plusSeconds(DEFAULT_TTL_SECONDS));
+        device.setExpiresAt(now.plusSeconds(300)); // 5 mins grace period
         device.setRevoked(false);
         trustedDeviceRepository.save(device);
         return token;
@@ -117,7 +118,7 @@ public class AuthService {
         }
         // Refresh usage timestamps
         device.setLastUsedAt(Instant.now());
-        device.setExpiresAt(Instant.now().plusSeconds(DEFAULT_TTL_SECONDS));
+        device.setExpiresAt(Instant.now().plusSeconds(300));
         trustedDeviceRepository.save(device);
         return createSession(device.getUser());
     }

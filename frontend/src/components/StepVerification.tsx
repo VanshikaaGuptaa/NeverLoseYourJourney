@@ -7,7 +7,8 @@ export default function StepVerification() {
   const navigate = useNavigate();
   const location = useLocation();
   const { loginWithOtp } = useAuthStore();
-  const state = location.state as { mobile?: string; from?: string } | null;
+  const state = location.state as { email?: string; mobile?: string; from?: string } | null;
+  const email = state?.email || 'user@example.com';
   const mobile = state?.mobile || '9999999999';
   const from = state?.from || '/step/1';
 
@@ -24,7 +25,7 @@ export default function StepVerification() {
       if (data) {
         setStatus('✅ OTP verified. Logging in...');
         // Step 2: finalize login and get token, automatically register as trusted for grace period
-        await loginWithOtp(mobile, true);
+        await loginWithOtp(mobile, email, true);
         navigate(from, { replace: true });
       } else {
         setStatus('❌ Invalid code');

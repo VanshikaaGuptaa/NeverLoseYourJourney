@@ -16,9 +16,7 @@ export default function StepPersonal() {
 
   useEffect(() => { setCurrentStep('PERSONAL'); }, [setCurrentStep]);
 
-  useEffect(() => {
-    reset({ name: formData.name || '', email: formData.email || '' });
-  }, [formData.name, formData.email, reset]);
+  // Removed the reset useEffect because it fires on every keystroke via watch -> updateField -> formData change, breaking the form.
 
   useEffect(() => {
     const sub = watch((value) => {

@@ -45,6 +45,7 @@ public class JourneyController {
             return journeyOpt.map(ResponseEntity::ok)
                     .orElseGet(() -> ResponseEntity.noContent().build());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(401).build();
         }
     }

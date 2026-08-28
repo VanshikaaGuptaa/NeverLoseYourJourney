@@ -100,13 +100,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div style={{ background: 'white', padding: '30px', borderRadius: '8px', maxWidth: '600px', width: '90%', maxHeight: '80vh', overflowY: 'auto', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
             <h2 style={{ marginTop: 0, color: '#00695C', borderBottom: '2px solid #00695C', paddingBottom: '10px' }}>📘 Testing Guide & Features</h2>
             
-            <h4 style={{ color: '#d32f2f' }}>1. Smart OTP Authentication</h4>
+            <h4 style={{ color: '#d32f2f' }}>1. Secure Biometric Authentication</h4>
             <p style={{ fontSize: '0.9rem', lineHeight: '1.5' }}>
               <strong>Login:</strong> Enter any UID and password to automatically register. You will be prompted for an OTP.<br/>
               <strong>Check Console:</strong> Press <code>F12</code> to open your Browser DevTools Console. The demo OTP will be printed in green text!<br/>
-              <strong>Grace Period:</strong> After verifying, you are granted a 15-minute "Trusted Device" grace period. If you use the <em>Expire Auth</em> button and log back in, you will bypass the OTP screen entirely!<br/>
-              <span style={{ fontStyle: 'italic', color: '#00695C' }}>👉 Try re-logging in on the same browser (no OTP required), and then try in another browser or Incognito window (it will correctly block you and demand an OTP!).</span><br/>
-              <span style={{ fontStyle: 'italic', color: '#d32f2f' }}>Note: For real-world situations like public computers, we will add an explicit user consent checkbox for this grace period.</span>
+              <strong>Passkey Enrollment:</strong> After verifying, you are prompted to enroll your device's biometric Passkey (Fingerprint/FaceID).<br/>
+              <strong>Seamless Recovery:</strong> If your session expires (try the <em>Expire Auth</em> button), you can instantly resume exactly where you left off by verifying your fingerprint—no more annoying OTPs!<br/>
             </p>
 
             <h4 style={{ color: '#00bcd4' }}>2. Control Panel Simulator</h4>

@@ -30,6 +30,9 @@ public class AuthController {
             if ("OTP_REQUIRED".equals(e.getMessage())) {
                 return ResponseEntity.status(202).build();
             }
+            if ("WEBAUTHN_REQUIRED".equals(e.getMessage())) {
+                return ResponseEntity.status(202).header("X-Auth-Method", "WEBAUTHN").build();
+            }
             throw e;
         }
     }

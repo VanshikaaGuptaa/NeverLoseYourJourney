@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useAuthStore } from '../store/auth';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 
 export default function Login() {
-  const { login } = useAuthStore();
+  const { login, token, loginWithWebAuthn } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState('');
@@ -12,6 +12,10 @@ export default function Login() {
 
   const from = location.state?.from?.pathname || '/step/1';
 
+  if (token) {
+    return <Navigate to="/step/1" replace />;
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -19,7 +23,14 @@ export default function Login() {
       await login({ email, password });
       navigate(from, { replace: true });
     } catch (err: any) {
-      if (err.message === 'OTP_REQUIRED') {
+      if (err.message === 'WEBAUTHN_REQUIRED') {
+        try {
+          await loginWithWebAuthn(email);
+          navigate(from, { replace: true });
+        } catch {
+          alert('Passkey login failed or cancelled.');
+        }
+      } else if (err.message === 'OTP_REQUIRED') {
         navigate('/verify-otp', { state: { email, mobile: '9999999999', from } });
       } else {
         alert('Login failed. Please try again.');
@@ -38,7 +49,7 @@ export default function Login() {
             <li style={{ marginBottom: '10px' }}><a href="#" style={{ color: '#1976d2' }}>Offline Resilience</a><br/><span style={{ color: '#666', fontSize: '0.8rem' }}>Continue your multi-step journey seamlessly even when the network drops.</span></li>
             <li style={{ marginBottom: '10px' }}><a href="#" style={{ color: '#1976d2' }}>Auto-Save Functionality</a><br/><span style={{ color: '#666', fontSize: '0.8rem' }}>Never lose your progress. All form data is automatically saved locally.</span></li>
             <li style={{ marginBottom: '10px' }}><a href="#" style={{ color: '#1976d2' }}>Session Recovery</a><br/><span style={{ color: '#666', fontSize: '0.8rem' }}>Recover your active session effortlessly after an accidental browser close.</span></li>
-            <li style={{ marginBottom: '10px' }}><a href="#" style={{ color: '#1976d2' }}>Smart OTP Authentication</a><br/><span style={{ color: '#666', fontSize: '0.8rem' }}>Enjoy a frictionless login experience. Our system remembers your trusted device securely, so you won't be forced to re-enter your OTP again and again if you reconnect during your grace period.</span></li>
+            <li style={{ marginBottom: '10px' }}><a href="#" style={{ color: '#1976d2' }}>Biometric Session Recovery</a><br/><span style={{ color: '#666', fontSize: '0.8rem' }}>Enjoy a highly secure, frictionless login experience using your device's native passkeys (Fingerprint or FaceID), fully replacing vulnerable SMS OTPs when recovering your session.</span></li>
           </ul>
           <hr style={{ margin: '20px 0', borderColor: '#eee' }} />
           <h4 style={{ color: '#d32f2f' }}>📢 New Feature Release</h4>
